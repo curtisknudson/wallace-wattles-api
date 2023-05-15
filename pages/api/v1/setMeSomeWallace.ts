@@ -31,6 +31,16 @@ const SetWallace = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const names = ["marion", "stephen", "nora", "dayne", "curtis", "jenna"];
 
+  if (name.includes("override")) {
+    await database.insertOne({
+      quote,
+      name,
+    });
+    res.status(200).json({
+      quote,
+    });
+    return;
+  }
   if (names.includes(name)) {
     const listOfQuotes: Quote["quote"][] = (
       await database.find().toArray()
