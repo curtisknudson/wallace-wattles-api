@@ -31,8 +31,6 @@ const Home: NextPage = () => {
     resolver: yupResolver(WATTLES_SCHEMA),
   });
 
-  console.log({ isGetting });
-
   const getWallace = async () => {
     setSubmitWisdom(false);
     setIsGetting(true);
