@@ -20,6 +20,7 @@ const Home: NextPage = () => {
   const setApi = "api/v1/setMeSomeWallace";
   const [newQuote, setNewQuote] = useState<string | undefined>(undefined);
   const [submitWisdom, setSubmitWisdom] = useState(false);
+  const [isGetting, setIsGetting] = useState(false);
   const {
     register,
     handleSubmit,
@@ -30,12 +31,15 @@ const Home: NextPage = () => {
     resolver: yupResolver(WATTLES_SCHEMA),
   });
 
+  console.log({ isGetting });
+
   const getWallace = async () => {
     setSubmitWisdom(false);
+    setIsGetting(true);
     const wallaceQuote = await fetch(getApi)
       .then((res) => res.json())
       .then((res) => res);
-
+    setIsGetting(false);
     setNewQuote(wallaceQuote.quote);
   };
 
@@ -90,9 +94,17 @@ const Home: NextPage = () => {
       </div>
 
       <div className="flex justify-center w-full">
-        {newQuote && !submitWisdom && (
-          <p className="w-full max-w-[500px] text-center p-16">{newQuote}</p>
+        {isGetting ? (
+          <p className="w-full max-w-[500px] text-center p-16">
+            ...getting wisdom, please wait
+          </p>
+        ) : (
+          newQuote &&
+          !submitWisdom && (
+            <p className="w-full max-w-[500px] text-center p-16">{newQuote}</p>
+          )
         )}
+
         {submitWisdom && (
           <form
             onSubmit={handleSubmit(submitQuote)}
